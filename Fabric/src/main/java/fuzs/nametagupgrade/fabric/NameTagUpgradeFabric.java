@@ -1,0 +1,13 @@
+package fuzs.nametagupgrade.fabric;
+
+import fuzs.nametagupgrade.NameTagUpgrade;
+import fuzs.puzzleslib.api.core.v1.ModConstructor;
+import net.fabricmc.api.ModInitializer;
+
+public class NameTagUpgradeFabric implements ModInitializer {
+
+    @Override
+    public void onInitialize() {
+        ModConstructor.construct(NameTagUpgrade.MOD_ID, NameTagUpgrade::new);
+    }
+}
