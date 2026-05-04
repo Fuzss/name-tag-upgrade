@@ -1,9 +1,10 @@
 {
+    "minecraft": "26.1.2",
     "mod": {
         "id": "nametagupgrade",
         "group": "fuzs.nametagupgrade",
         "name": "Name Tag Upgrade",
-        "version": "21.11.0",
+        "version": "26.1.0",
         "authors": [
             "Fuzs"
         ],

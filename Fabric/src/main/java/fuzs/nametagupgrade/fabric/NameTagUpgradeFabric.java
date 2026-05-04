@@ -1,7 +1,7 @@
 package fuzs.nametagupgrade.fabric;
 
-import fuzs.nametagupgrade.NameTagUpgrade;
-import fuzs.puzzleslib.api.core.v1.ModConstructor;
+import fuzs.nametagupgrade.common.NameTagUpgrade;
+import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import net.fabricmc.api.ModInitializer;
 
 public class NameTagUpgradeFabric implements ModInitializer {

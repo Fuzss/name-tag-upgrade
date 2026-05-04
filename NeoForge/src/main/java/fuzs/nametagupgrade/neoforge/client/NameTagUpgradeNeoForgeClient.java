@@ -1,9 +1,9 @@
 package fuzs.nametagupgrade.neoforge.client;
 
-import fuzs.nametagupgrade.NameTagUpgrade;
-import fuzs.nametagupgrade.client.NameTagUpgradeClient;
-import fuzs.nametagupgrade.data.client.ModLanguageProvider;
-import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
+import fuzs.nametagupgrade.common.NameTagUpgrade;
+import fuzs.nametagupgrade.common.client.NameTagUpgradeClient;
+import fuzs.nametagupgrade.common.data.client.ModLanguageProvider;
+import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.Mod;
