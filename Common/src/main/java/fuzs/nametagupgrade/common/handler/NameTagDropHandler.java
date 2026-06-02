@@ -5,6 +5,7 @@ import fuzs.nametagupgrade.common.config.ServerConfig;
 import fuzs.nametagupgrade.common.init.ModRegistry;
 import fuzs.puzzleslib.common.api.event.v1.core.EventResult;
 import fuzs.puzzleslib.common.api.event.v1.core.EventResultHolder;
+import fuzs.puzzleslib.common.api.item.v2.ToolTypeHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -52,7 +53,7 @@ public class NameTagDropHandler {
     public static EventResultHolder<InteractionResult> onUseEntity(Player player, Level level, InteractionHand interactionHand, Entity entity, Vec3 hitVector) {
         ItemStack itemInHand = player.getItemInHand(interactionHand);
         if (NameTagUpgrade.CONFIG.get(ServerConfig.class).removeCustomNameUsingShears) {
-            if (itemInHand.is(ModRegistry.SHEARS_ITEM_TAG)
+            if (ToolTypeHelper.INSTANCE.isShears(itemInHand)
                     && !entity.is(ModRegistry.NEVER_SHEARS_CUSTOM_NAME_ENTITY_TAG)) {
                 if (!(entity instanceof Leashable leashable) || !leashable.isLeashed()) {
                     InteractionResult interactionResult = shearOffCustomName(player, level, entity);
