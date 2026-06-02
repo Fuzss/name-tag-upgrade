@@ -7,7 +7,7 @@
         "authors": [
             "Fuzs"
         ],
-        "description": "Example description.",
+        "description": "Smarter name tags with renaming on the go and handy quality-of-life improvements.",
         "license": "MPL-2.0"
     },
     "dependencies": [
@@ -36,8 +36,18 @@
     ],
     "links": [
         {
+            "name": "curseforge",
+            "slug": "name-tag-upgrade",
+            "id": "1562515"
+        },
+        {
             "name": "github",
             "slug": "name-tag-upgrade"
+        },
+        {
+            "name": "modrinth",
+            "slug": "name-tag-upgrade",
+            "id": "d7LHtwd7"
         }
     ],
     "environments": {
