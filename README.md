@@ -2,15 +2,16 @@
 
 ### Minecraft 26.x
 
-| Branch | Status | Changelog |
-| --- | --- | --- |
-| [26.1.x](https://github.com/Fuzss/name-tag-upgrade/tree/26.1.x) | ✅&nbsp;Primary | [CHANGELOG.md](https://github.com/Fuzss/name-tag-upgrade/blob/26.1.x/CHANGELOG.md) |
+| Branch | Status | Changelog | Fabric | NeoForge |
+| --- | --- | --- | --- | --- |
+| [26.2.x](https://github.com/Fuzss/name-tag-upgrade/tree/26.2.x) | ✅&nbsp;Primary | [CHANGELOG.md](https://github.com/Fuzss/name-tag-upgrade/blob/26.2.x/CHANGELOG.md) | <img src="https://cdn.simpleicons.org/curseforge" width="14" />&nbsp;[CurseForge](https://www.curseforge.com/minecraft/mc-mods/name-tag-upgrade/files/all?version=26.1.2&gameVersionTypeId=4)<br /> <img src="https://cdn.simpleicons.org/modrinth" width="14" />&nbsp;[Modrinth](https://modrinth.com/mod/name-tag-upgrade/versions?g=26.1.2&l=fabric) | <img src="https://cdn.simpleicons.org/curseforge" width="14" />&nbsp;[CurseForge](https://www.curseforge.com/minecraft/mc-mods/name-tag-upgrade/files/all?version=26.1.2&gameVersionTypeId=6)<br /> <img src="https://cdn.simpleicons.org/modrinth" width="14" />&nbsp;[Modrinth](https://modrinth.com/mod/name-tag-upgrade/versions?g=26.1.2&l=neoforge) |
+| [26.1.x](https://github.com/Fuzss/name-tag-upgrade/tree/26.1.x) | ✅&nbsp;Maintained | [CHANGELOG.md](https://github.com/Fuzss/name-tag-upgrade/blob/26.1.x/CHANGELOG.md) | <img src="https://cdn.simpleicons.org/curseforge" width="14" />&nbsp;[CurseForge](https://www.curseforge.com/minecraft/mc-mods/name-tag-upgrade/files/all?version=26.1.2&gameVersionTypeId=4)<br /> <img src="https://cdn.simpleicons.org/modrinth" width="14" />&nbsp;[Modrinth](https://modrinth.com/mod/name-tag-upgrade/versions?g=26.1.2&l=fabric) | <img src="https://cdn.simpleicons.org/curseforge" width="14" />&nbsp;[CurseForge](https://www.curseforge.com/minecraft/mc-mods/name-tag-upgrade/files/all?version=26.1.2&gameVersionTypeId=6)<br /> <img src="https://cdn.simpleicons.org/modrinth" width="14" />&nbsp;[Modrinth](https://modrinth.com/mod/name-tag-upgrade/versions?g=26.1.2&l=neoforge) |
 
 ### Minecraft 1.21.x
 
-| Branch | Status | Changelog |
-| --- | --- | --- |
-| [1.21.11](https://github.com/Fuzss/name-tag-upgrade/tree/1.21.11) | ❌&nbsp;Archived | [CHANGELOG.md](https://github.com/Fuzss/name-tag-upgrade/blob/1.21.11/CHANGELOG.md) |
+| Branch | Status | Changelog | Fabric | NeoForge |
+| --- | --- | --- | --- | --- |
+| [1.21.11](https://github.com/Fuzss/name-tag-upgrade/tree/1.21.11) | ❌&nbsp;Archived | [CHANGELOG.md](https://github.com/Fuzss/name-tag-upgrade/blob/1.21.11/CHANGELOG.md) | <img src="https://cdn.simpleicons.org/curseforge" width="14" />&nbsp;[CurseForge](https://www.curseforge.com/minecraft/mc-mods/name-tag-upgrade/files/all?version=1.21.11&gameVersionTypeId=4)<br /> <img src="https://cdn.simpleicons.org/modrinth" width="14" />&nbsp;[Modrinth](https://modrinth.com/mod/name-tag-upgrade/versions?g=1.21.11&l=fabric) | <img src="https://cdn.simpleicons.org/curseforge" width="14" />&nbsp;[CurseForge](https://www.curseforge.com/minecraft/mc-mods/name-tag-upgrade/files/all?version=1.21.11&gameVersionTypeId=6)<br /> <img src="https://cdn.simpleicons.org/modrinth" width="14" />&nbsp;[Modrinth](https://modrinth.com/mod/name-tag-upgrade/versions?g=1.21.11&l=neoforge) |
 
 ---
 
