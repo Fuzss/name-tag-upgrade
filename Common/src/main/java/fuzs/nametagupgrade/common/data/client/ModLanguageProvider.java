@@ -15,7 +15,7 @@ public class ModLanguageProvider extends AbstractLanguageProvider {
     @Override
     public void addTranslations(TranslationBuilder builder) {
         builder.add(NameTagEditScreen.EDIT_NAME_TAG_KEY, "Edit %s");
-        builder.add(FormattingGuideWidget.CHAT_FORMATTING_FORMAT_KEY, "§%s - %s");
+        builder.add(FormattingGuideWidget.CHAT_FORMATTING_FORMAT_KEY, "%s - %s");
         for (ChatFormatting chatFormatting : ChatFormatting.values()) {
             String chatFormattingName = FormattingGuideWidget.getChatFormattingName(chatFormatting);
             builder.add(FormattingGuideWidget.getChatFormattingKey(chatFormatting), chatFormattingName);

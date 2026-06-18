@@ -9,7 +9,7 @@
   "gui.nametagupgrade.chat.formatting.dark_green": "Dark Green",
   "gui.nametagupgrade.chat.formatting.dark_purple": "Dark Purple",
   "gui.nametagupgrade.chat.formatting.dark_red": "Dark Red",
-  "gui.nametagupgrade.chat.formatting.format": "§%s - %s",
+  "gui.nametagupgrade.chat.formatting.format": "%s - %s",
   "gui.nametagupgrade.chat.formatting.gold": "Gold",
   "gui.nametagupgrade.chat.formatting.gray": "Gray",
   "gui.nametagupgrade.chat.formatting.green": "Green",
