@@ -124,12 +124,12 @@ public class FormattableEditBox extends EditBox {
     }
 
     @Override
-    public int findClickedPositionInText(MouseButtonEvent mouseButtonEvent) {
-        int i = Math.min(Mth.floor(mouseButtonEvent.x()) - this.textX, this.getInnerWidth());
-        String string = this.value;
+    public int findClickedPositionInText(MouseButtonEvent event) {
+        int positionInText = Mth.clamp(Mth.floor(event.x()) - this.textX, 0, this.getInnerWidth());
+        String displayed = this.value;
         return this.displayPos + FormattedStringSplitter.plainSubstrByWidth(this.font.getSplitter(),
-                string,
-                i,
+                displayed,
+                positionInText,
                 this.displayPos).length();
     }
 

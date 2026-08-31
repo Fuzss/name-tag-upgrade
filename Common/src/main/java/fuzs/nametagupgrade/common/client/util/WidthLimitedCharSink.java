@@ -22,6 +22,7 @@ public class WidthLimitedCharSink implements FormattedCharSink {
         this.stringSplitter = stringSplitter;
         this.skip = skip;
         this.maxWidth = maxWidth;
+        this.position = skip;
     }
 
     @Override
