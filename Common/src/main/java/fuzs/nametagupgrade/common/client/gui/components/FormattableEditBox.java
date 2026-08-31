@@ -28,12 +28,12 @@ import java.util.List;
  */
 public class FormattableEditBox extends EditBox {
 
-    public FormattableEditBox(Font font, int x, int y, int width, int height, Component message) {
-        this(font, x, y, width, height, null, message);
+    public FormattableEditBox(Font font, int x, int y, int width, int height, Component narration) {
+        this(font, x, y, width, height, null, narration);
     }
 
-    public FormattableEditBox(Font font, int x, int y, int width, int height, @Nullable EditBox editBox, Component message) {
-        super(font, x, y, width, height, editBox, message);
+    public FormattableEditBox(Font font, int x, int y, int width, int height, @Nullable EditBox oldBox, Component narration) {
+        super(font, x, y, width, height, oldBox, narration);
         // custom formatter for applying formatting codes directly to the text preview
         this.addFormatter((String displayText, int displayPos) -> {
             List<FormattedCharSequence> list = new ArrayList<>();
@@ -56,27 +56,27 @@ public class FormattableEditBox extends EditBox {
     }
 
     @Override
-    public void setValue(String text) {
+    public void setValue(String value) {
         // Custom text length handling so we ignore formatting codes.
-        if (FormattedStringUtil.stringLength(text) > this.maxLength) {
-            this.value = FormattedStringUtil.substring(text, 0, this.maxLength);
+        if (FormattedStringUtil.stringLength(value) > this.maxLength) {
+            this.value = FormattedStringUtil.substring(value, 0, this.maxLength);
         } else {
-            this.value = text;
+            this.value = value;
         }
 
         this.moveCursorToEnd(false);
         this.setHighlightPos(this.cursorPos);
-        this.onValueChange(text);
+        this.onValueChange(value);
     }
 
     @Override
-    public void insertText(String textToWrite) {
+    public void insertText(String input) {
         int start = Math.min(this.cursorPos, this.highlightPos);
         int end = Math.max(this.cursorPos, this.highlightPos);
-        String string = FormattedStringUtil.filterText(textToWrite);
+        String string = FormattedStringUtil.filterText(input);
         // Delete the selected character range from the current value.
-        StringBuilder stringBuilder = new StringBuilder(this.value).replace(start, end, "");
-        String newValue = stringBuilder.toString();
+        StringBuilder builder = new StringBuilder(this.value).replace(start, end, "");
+        String updatedValue = builder.toString();
         // Insert new characters one by one, checking after each if the value is still below the max allowed length.
         int insertionLength = 0;
         for (; insertionLength < string.length(); insertionLength++) {
@@ -84,37 +84,37 @@ public class FormattableEditBox extends EditBox {
             // Special handling for surrogate pairs as done in the vanilla super method.
             if (Character.isHighSurrogate(character)) {
                 if (insertionLength + 1 < string.length()) {
-                    stringBuilder.insert(start + insertionLength, character);
+                    builder.insert(start + insertionLength, character);
                     insertionLength++;
-                    stringBuilder.insert(start + insertionLength, string.charAt(insertionLength));
+                    builder.insert(start + insertionLength, string.charAt(insertionLength));
                 } else {
                     break;
                 }
             } else {
-                stringBuilder.insert(start + insertionLength, character);
+                builder.insert(start + insertionLength, character);
             }
 
-            if (FormattedStringUtil.stringLength(stringBuilder.toString()) <= this.maxLength) {
-                newValue = stringBuilder.toString();
+            if (FormattedStringUtil.stringLength(builder.toString()) <= this.maxLength) {
+                updatedValue = builder.toString();
             } else {
                 break;
             }
         }
 
-        this.value = newValue;
+        this.value = updatedValue;
         this.setCursorPosition(start + insertionLength);
         this.setHighlightPos(this.cursorPos);
         this.onValueChange(this.value);
     }
 
     @Override
-    public boolean charTyped(CharacterEvent characterEvent) {
+    public boolean charTyped(CharacterEvent event) {
         if (!this.canConsumeInput()) {
             return false;
-        } else if (FormattedStringUtil.isAllowedChatCharacter(characterEvent)) {
+        } else if (FormattedStringUtil.isAllowedChatCharacter(event)) {
             // Custom text length handling so we ignore formatting codes.
             if (this.isEditable) {
-                this.insertText(characterEvent.codepointAsString());
+                this.insertText(event.codepointAsString());
             }
 
             return true;
@@ -126,11 +126,10 @@ public class FormattableEditBox extends EditBox {
     @Override
     public int findClickedPositionInText(MouseButtonEvent event) {
         int positionInText = Mth.clamp(Mth.floor(event.x()) - this.textX, 0, this.getInnerWidth());
-        String displayed = this.value;
-        return this.displayPos + FormattedStringSplitter.plainSubstrByWidth(this.font.getSplitter(),
-                displayed,
+        return FormattedStringSplitter.plainIndexAtWidth(this.font.getSplitter(),
+                this.value,
                 positionInText,
-                this.displayPos).length();
+                this.displayPos);
     }
 
     @Override
@@ -221,38 +220,38 @@ public class FormattableEditBox extends EditBox {
     @Override
     public void updateTextPosition() {
         if (this.font != null) {
-            String string = FormattedStringSplitter.plainSubstrByWidth(this.font.getSplitter(),
+            String displayed = FormattedStringSplitter.plainSubstrByWidth(this.font.getSplitter(),
                     this.value,
                     this.getInnerWidth(),
                     this.displayPos);
             this.textX = this.getX() + (this.isCentered() ?
-                    (this.getWidth() - FormattedStringSplitter.width(this.font.getSplitter(), string)) / 2 :
+                    (this.getWidth() - FormattedStringSplitter.width(this.font.getSplitter(), displayed)) / 2 :
                     (this.bordered ? 4 : 0));
             this.textY = this.bordered ? this.getY() + (this.height - 8) / 2 : this.getY();
         }
     }
 
     @Override
-    public void scrollTo(int position) {
+    public void scrollTo(int pos) {
         if (this.font != null) {
             this.displayPos = Math.min(this.displayPos, this.value.length());
             int innerWidth = this.getInnerWidth();
-            String string = FormattedStringSplitter.plainSubstrByWidth(this.font.getSplitter(),
+            String displayed = FormattedStringSplitter.plainSubstrByWidth(this.font.getSplitter(),
                     this.value,
                     innerWidth,
                     this.displayPos);
-            int k = string.length() + this.displayPos;
-            if (position == this.displayPos) {
+            int lastPos = displayed.length() + this.displayPos;
+            if (pos == this.displayPos) {
                 this.displayPos -= FormattedStringSplitter.plainSubstrByWidth(this.font.getSplitter(),
                         this.value,
                         innerWidth,
                         true).length();
             }
 
-            if (position > k) {
-                this.displayPos += position - k;
-            } else if (position <= this.displayPos) {
-                this.displayPos -= this.displayPos - position;
+            if (pos > lastPos) {
+                this.displayPos += pos - lastPos;
+            } else if (pos <= this.displayPos) {
+                this.displayPos -= this.displayPos - pos;
             }
 
             this.displayPos = Mth.clamp(this.displayPos, 0, this.value.length());
@@ -260,8 +259,9 @@ public class FormattableEditBox extends EditBox {
     }
 
     @Override
-    public int getScreenX(int charNum) {
-        return charNum > this.value.length() ? this.getX() :
-                this.getX() + FormattedStringSplitter.width(this.font.getSplitter(), this.value.substring(0, charNum));
+    public int getScreenX(int charIndex) {
+        return charIndex > this.value.length() ? this.getX() :
+                this.getX() + FormattedStringSplitter.width(this.font.getSplitter(),
+                        this.value.substring(0, charIndex));
     }
 }

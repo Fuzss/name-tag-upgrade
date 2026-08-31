@@ -80,7 +80,7 @@ public class FormattedStringSplitter {
      */
     public static String plainSubstrByWidth(StringSplitter splitter, String text, int maxWidth, boolean tail) {
         return tail ? plainTailByWidth(splitter, text, maxWidth, FormattedStringUtil.EMPTY) :
-                plainHeadByWidth(splitter, text, maxWidth, FormattedStringUtil.EMPTY, 0);
+                plainSubstrByWidth(splitter, text, maxWidth, 0);
     }
 
     /**
@@ -93,5 +93,17 @@ public class FormattedStringSplitter {
         WidthLimitedCharSink widthSink = new WidthLimitedCharSink(splitter, maxWidth);
         sink.iterateBackwards(widthSink);
         return content.substring(widthSink.getPosition());
+    }
+
+    /**
+     * @see StringSplitter#plainIndexAtWidth(String, int, Style)
+     */
+    public static int plainIndexAtWidth(StringSplitter stringSplitter, String content, int width, int skip) {
+        Objects.requireNonNull(content, "content is null");
+        StyleCombiningCharSink sink = new StyleCombiningCharSink(FormattedStringUtil.EMPTY);
+        FormattedStringDecomposer.iterateFormatted(content, FormattedStringUtil.EMPTY, sink);
+        WidthClosestCharSink widthSink = new WidthClosestCharSink(stringSplitter, width, skip);
+        sink.iterateForwards(widthSink);
+        return widthSink.getPosition();
     }
 }
