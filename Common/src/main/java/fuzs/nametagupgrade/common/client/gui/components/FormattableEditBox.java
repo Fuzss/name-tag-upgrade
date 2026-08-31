@@ -134,81 +134,86 @@ public class FormattableEditBox extends EditBox {
     }
 
     @Override
-    public void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         if (this.isVisible()) {
             if (this.isBordered()) {
-                Identifier identifier = SPRITES.get(this.isActive(), this.isFocused());
-                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
-                        identifier,
+                Identifier sprite = SPRITES.get(this.isActive(), this.isFocused());
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED,
+                        sprite,
                         this.getX(),
                         this.getY(),
                         this.getWidth(),
                         this.getHeight());
             }
 
-            int i = this.isEditable ? this.textColor : this.textColorUneditable;
-            int j = this.cursorPos - this.displayPos;
-            String string = FormattedStringSplitter.plainSubstrByWidth(this.font.getSplitter(),
+            int color = this.isEditable ? this.textColor : this.textColorUneditable;
+            int relCursorPos = this.cursorPos - this.displayPos;
+            String displayed = FormattedStringSplitter.plainSubstrByWidth(this.font.getSplitter(),
                     this.value,
                     this.getInnerWidth(),
                     this.displayPos);
-            boolean bl = j >= 0 && j <= string.length();
-            boolean bl2 = this.isFocused() && (Util.getMillis() - this.focusedTime) / 300L % 2L == 0L && bl;
-            int k = this.textX;
-            int l = Mth.clamp(this.highlightPos - this.displayPos, 0, string.length());
-            if (!string.isEmpty()) {
-                String string2 = bl ? string.substring(0, j) : string;
-                FormattedCharSequence formattedCharSequence = this.applyFormat(string2, this.displayPos);
-                guiGraphics.text(this.font, formattedCharSequence, k, this.textY, i, this.textShadow);
-                k += this.font.width(formattedCharSequence) + 1;
+            boolean cursorOnScreen = relCursorPos >= 0 && relCursorPos <= displayed.length();
+            boolean showCursor =
+                    this.isFocused() && (Util.getMillis() - this.focusedTime) / 300L % 2L == 0L && cursorOnScreen;
+            int drawX = this.textX;
+            int relHighlightPos = Mth.clamp(this.highlightPos - this.displayPos, 0, displayed.length());
+            if (!displayed.isEmpty()) {
+                String half = cursorOnScreen ? displayed.substring(0, relCursorPos) : displayed;
+                FormattedCharSequence charSequence = this.applyFormat(half, this.displayPos);
+                graphics.text(this.font, charSequence, drawX, this.textY, color, this.textShadow);
+                drawX += this.font.width(charSequence) + 1;
             }
 
-            boolean bl3 = this.cursorPos < this.value.length()
+            boolean insert = this.cursorPos < this.value.length()
                     || FormattedStringUtil.stringLength(this.value) >= this.getMaxLength();
-            int m = k;
-            if (!bl) {
-                m = j > 0 ? this.textX + this.width : this.textX;
-            } else if (bl3) {
-                m = k - 1;
-                k--;
+            int cursorX = drawX;
+            if (!cursorOnScreen) {
+                cursorX = relCursorPos > 0 ? this.textX + this.width : this.textX;
+            } else if (insert) {
+                cursorX = drawX - 1;
+                drawX--;
             }
 
-            if (!string.isEmpty() && bl && j < string.length()) {
-                guiGraphics.text(this.font,
-                        this.applyFormat(string.substring(j), this.cursorPos),
-                        k,
+            if (!displayed.isEmpty() && cursorOnScreen && relCursorPos < displayed.length()) {
+                graphics.text(this.font,
+                        this.applyFormat(displayed.substring(relCursorPos), this.cursorPos),
+                        drawX,
                         this.textY,
-                        i,
+                        color,
                         this.textShadow);
             }
 
-            if (this.hint != null && string.isEmpty() && !this.isFocused()) {
-                guiGraphics.text(this.font, this.hint, k, this.textY, i);
+            if (this.hint != null && displayed.isEmpty() && !this.isFocused()) {
+                graphics.text(this.font, this.hint, drawX, this.textY, color);
             }
 
-            if (!bl3 && this.suggestion != null) {
-                guiGraphics.text(this.font, this.suggestion, m - 1, this.textY, -8355712, this.textShadow);
+            if (!insert && this.suggestion != null) {
+                graphics.text(this.font, this.suggestion, cursorX - 1, this.textY, -8355712, this.textShadow);
             }
 
-            if (l != j) {
-                int n = this.textX + FormattedStringSplitter.width(this.font.getSplitter(), this.value.substring(0, l));
-                guiGraphics.textHighlight(Math.min(m, this.getX() + this.width),
+            if (relHighlightPos != relCursorPos) {
+                int highlightPos = this.displayPos + relHighlightPos;
+                int highlightX = this.textX + FormattedStringSplitter.width(this.font.getSplitter(),
+                        this.value,
+                        this.displayPos,
+                        highlightPos);
+                graphics.textHighlight(Math.min(cursorX, this.getX() + this.width),
                         this.textY - 1,
-                        Math.min(n - 1, this.getX() + this.width),
+                        Math.min(highlightX - 1, this.getX() + this.width),
                         this.textY + 1 + 9,
                         this.invertHighlightedTextColor);
             }
 
-            if (bl2) {
-                if (bl3) {
-                    guiGraphics.fill(m, this.textY - 1, m + 1, this.textY + 1 + 9, i);
+            if (showCursor) {
+                if (insert) {
+                    graphics.fill(cursorX, this.textY - 1, cursorX + 1, this.textY + 1 + 9, color);
                 } else {
-                    guiGraphics.text(this.font, "_", m, this.textY, i, this.textShadow);
+                    graphics.text(this.font, "_", cursorX, this.textY, color, this.textShadow);
                 }
             }
 
             if (this.isHovered()) {
-                guiGraphics.requestCursor(this.isEditable ? CursorTypes.IBEAM : CursorTypes.NOT_ALLOWED);
+                graphics.requestCursor(this.isEditable ? CursorTypes.IBEAM : CursorTypes.NOT_ALLOWED);
             }
         }
     }
