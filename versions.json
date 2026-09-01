@@ -4,11 +4,17 @@
     "26.1.x": "maintained",
     "26.2.x": "primary"
   },
-  "properties": {
-    "distributions.curseforge.id": "1562515",
-    "distributions.curseforge.slug": "name-tag-upgrade",
-    "distributions.github.slug": "name-tag-upgrade",
-    "distributions.modrinth.id": "d7LHtwd7",
-    "distributions.modrinth.slug": "name-tag-upgrade"
+  "distributions": {
+    "curseforge": {
+      "id": "1562515",
+      "slug": "name-tag-upgrade"
+    },
+    "github": {
+      "slug": "name-tag-upgrade"
+    },
+    "modrinth": {
+      "id": "d7LHtwd7",
+      "slug": "name-tag-upgrade"
+    }
   }
 }
