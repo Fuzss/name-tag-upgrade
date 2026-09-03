@@ -28,3 +28,5 @@ extendable  method  net/minecraft/client/gui/components/EditBox isCentered  ()Z
 extendable  method  net/minecraft/client/gui/components/EditBox updateTextPosition  ()V
 extendable  method  net/minecraft/client/gui/components/EditBox findClickedPositionInText   (Lnet/minecraft/client/input/MouseButtonEvent;)I
 accessible  method  net/minecraft/util/StringDecomposer feedChar    (Lnet/minecraft/network/chat/Style;Lnet/minecraft/util/FormattedCharSink;IC)Z
+accessible  method  net/minecraft/world/entity/Mob  canShearEquipment   (Lnet/minecraft/world/entity/player/Player;)Z
+accessible  method  net/minecraft/world/entity/animal/wolf/Wolf canShearEquipment   (Lnet/minecraft/world/entity/player/Player;)Z

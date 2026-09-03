@@ -12,13 +12,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Leashable;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
@@ -55,7 +56,7 @@ public class NameTagDropHandler {
         if (NameTagUpgrade.CONFIG.get(ServerConfig.class).removeCustomNameUsingShears) {
             if (ToolTypeHelper.INSTANCE.isShears(itemInHand)
                     && !entity.is(ModRegistry.NEVER_SHEARS_CUSTOM_NAME_ENTITY_TAG)) {
-                if (!(entity instanceof Leashable leashable) || !leashable.isLeashed()) {
+                if (!isLeashed(entity) && !isReadyForShearing(entity) && !hasShearableEquipment(entity, player)) {
                     InteractionResult interactionResult = shearOffCustomName(player, level, entity);
                     if (interactionResult.consumesAction()) {
                         itemInHand.hurtAndBreak(1, player, interactionHand);
@@ -95,6 +96,50 @@ public class NameTagDropHandler {
         }
 
         return EventResultHolder.pass();
+    }
+
+    /**
+     * @see Entity#interact(Player, InteractionHand, Vec3)
+     */
+    private static boolean isLeashed(Entity entity) {
+        if (!NameTagUpgrade.CONFIG.get(ServerConfig.class).prioritizeShearingLeash) {
+            return false;
+        }
+
+        return entity instanceof Leashable leashable && leashable.isLeashed();
+    }
+
+    private static boolean isReadyForShearing(Entity entity) {
+        if (!NameTagUpgrade.CONFIG.get(ServerConfig.class).prioritizeShearingBehavior) {
+            return false;
+        }
+
+        return entity instanceof Shearable shearable && shearable.readyForShearing()
+                && entity.is(ModRegistry.OVERRIDES_CUSTOM_NAME_SHEARING_ENTITY_TAG);
+    }
+
+    /**
+     * @see Entity#interact(Player, InteractionHand, Vec3)
+     * @see Mob#attemptToShearEquipment(Player, InteractionHand, ItemStack)
+     */
+    private static boolean hasShearableEquipment(Entity entity, Player player) {
+        if (!NameTagUpgrade.CONFIG.get(ServerConfig.class).prioritizeShearingEquipment) {
+            return false;
+        }
+
+        if (entity instanceof Mob mob && mob.canShearEquipment(player) && !player.isSecondaryUseActive()) {
+            for (EquipmentSlot slot : EquipmentSlot.VALUES) {
+                ItemStack itemStack = mob.getItemBySlot(slot);
+                Equippable equippable = itemStack.get(DataComponents.EQUIPPABLE);
+                if (equippable != null && equippable.canBeSheared() && (
+                        !EnchantmentHelper.has(itemStack, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE)
+                                || player.isCreative())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

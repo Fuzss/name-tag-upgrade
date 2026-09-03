@@ -11,6 +11,8 @@ public class ModRegistry {
             "never_drops_name_tag");
     public static final TagKey<EntityType<?>> NEVER_SHEARS_CUSTOM_NAME_ENTITY_TAG = TAGS.registerEntityTypeTag(
             "never_shears_custom_name");
+    public static final TagKey<EntityType<?>> OVERRIDES_CUSTOM_NAME_SHEARING_ENTITY_TAG = TAGS.registerEntityTypeTag(
+            "overrides_custom_name_shearing");
     public static final TagKey<EntityType<?>> NEVER_RETURNS_APPLIED_NAME_TAG_ENTITY_TAG = TAGS.registerEntityTypeTag(
             "never_returns_applied_name_tag");
 
