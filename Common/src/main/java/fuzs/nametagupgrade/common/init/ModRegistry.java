@@ -1,7 +1,7 @@
 package fuzs.nametagupgrade.common.init;
 
 import fuzs.nametagupgrade.common.NameTagUpgrade;
-import fuzs.puzzleslib.common.api.init.v3.tags.TagFactory;
+import fuzs.puzzleslib.api.init.v3.tags.TagFactory;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 

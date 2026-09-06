@@ -6,19 +6,19 @@ import fuzs.nametagupgrade.common.client.util.LengthLimitedCharSink;
 import fuzs.nametagupgrade.common.util.FormattedStringDecomposer;
 import fuzs.nametagupgrade.common.util.FormattedStringUtil;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.FormattedCharSink;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Util;
-import org.jspecify.annotations.Nullable;
+import net.minecraft.Util;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,10 +133,10 @@ public class FormattableEditBox extends EditBox {
     }
 
     @Override
-    public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+    public void extractWidgetRenderState(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (this.isVisible()) {
             if (this.isBordered()) {
-                Identifier sprite = SPRITES.get(this.isActive(), this.isFocused());
+                ResourceLocation sprite = SPRITES.get(this.isActive(), this.isFocused());
                 graphics.blitSprite(RenderPipelines.GUI_TEXTURED,
                         sprite,
                         this.getX(),

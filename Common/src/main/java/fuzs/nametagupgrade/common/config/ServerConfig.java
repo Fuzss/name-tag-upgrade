@@ -1,7 +1,7 @@
 package fuzs.nametagupgrade.common.config;
 
-import fuzs.puzzleslib.common.api.config.v3.Config;
-import fuzs.puzzleslib.common.api.config.v3.ConfigCore;
+import fuzs.puzzleslib.api.config.v3.Config;
+import fuzs.puzzleslib.api.config.v3.ConfigCore;
 
 public class ServerConfig implements ConfigCore {
     private static final String NAME_TAG_EDITING_CATEGORY = "name_tag_editing";

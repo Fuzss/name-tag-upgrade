@@ -5,25 +5,25 @@ import fuzs.nametagupgrade.common.client.gui.components.FormattableEditBox;
 import fuzs.nametagupgrade.common.client.gui.components.FormattingGuideWidget;
 import fuzs.nametagupgrade.common.config.ServerConfig;
 import fuzs.nametagupgrade.common.network.client.ServerboundEditNameTagMessage;
-import fuzs.puzzleslib.common.api.network.v4.MessageSender;
-import fuzs.puzzleslib.common.api.util.v1.ComponentHelper;
+import fuzs.puzzleslib.api.network.v4.MessageSender;
+import fuzs.puzzleslib.api.util.v1.ComponentHelper;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public class NameTagEditScreen extends Screen {
-    private static final Identifier TEXTURE_LOCATION = NameTagUpgrade.id("textures/gui/edit_name_tag.png");
-    private static final Identifier TEXT_FIELD_SPRITE = Identifier.withDefaultNamespace("container/anvil/text_field");
-    private static final Identifier TEXT_FIELD_DISABLED_SPRITE = Identifier.withDefaultNamespace(
+    private static final ResourceLocation TEXTURE_LOCATION = NameTagUpgrade.id("textures/gui/edit_name_tag.png");
+    private static final ResourceLocation TEXT_FIELD_SPRITE = ResourceLocation.withDefaultNamespace("container/anvil/text_field");
+    private static final ResourceLocation TEXT_FIELD_DISABLED_SPRITE = ResourceLocation.withDefaultNamespace(
             "container/anvil/text_field_disabled");
     public static final String EDIT_NAME_TAG_KEY = NameTagUpgrade.id("name_tag").toLanguageKey("gui", "edit");
 
@@ -84,7 +84,7 @@ public class NameTagEditScreen extends Screen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractRenderState(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.text(this.font,
                 this.title,
@@ -95,7 +95,7 @@ public class NameTagEditScreen extends Screen {
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
                 TEXTURE_LOCATION,

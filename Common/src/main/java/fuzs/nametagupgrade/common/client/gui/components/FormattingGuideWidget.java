@@ -4,10 +4,10 @@ import com.google.common.collect.Sets;
 import fuzs.nametagupgrade.common.NameTagUpgrade;
 import fuzs.nametagupgrade.common.client.gui.screens.inventory.tooltip.LargeTooltipPositioner;
 import fuzs.nametagupgrade.common.util.FormattedStringDecomposer;
-import fuzs.puzzleslib.common.api.client.gui.v2.tooltip.TooltipBuilder;
+import fuzs.puzzleslib.api.client.gui.v2.tooltip.TooltipBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.tooltip.BelowOrAboveWidgetTooltipPositioner;
@@ -107,7 +107,7 @@ public class FormattingGuideWidget extends AbstractWidget {
     }
 
     @Override
-    public void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractWidgetRenderState(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         Component component = this.getMessage();
         int posX = this.getX() + (this.getWidth() - this.font.width(component)) / 2;
         int posY = this.getY() + (this.getHeight() - 9) / 2;

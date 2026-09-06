@@ -1,9 +1,9 @@
 package fuzs.nametagupgrade.common.network.client;
 
 import fuzs.nametagupgrade.common.util.FormattedStringUtil;
-import fuzs.puzzleslib.common.api.network.v4.codec.ExtraStreamCodecs;
-import fuzs.puzzleslib.common.api.network.v4.message.MessageListener;
-import fuzs.puzzleslib.common.api.network.v4.message.play.ServerboundPlayMessage;
+import fuzs.puzzleslib.api.network.v4.codec.ExtraStreamCodecs;
+import fuzs.puzzleslib.api.network.v4.message.MessageListener;
+import fuzs.puzzleslib.api.network.v4.message.play.ServerboundPlayMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;

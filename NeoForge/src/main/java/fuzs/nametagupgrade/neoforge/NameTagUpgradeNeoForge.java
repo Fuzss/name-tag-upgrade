@@ -2,7 +2,7 @@ package fuzs.nametagupgrade.neoforge;
 
 import fuzs.nametagupgrade.common.NameTagUpgrade;
 import fuzs.nametagupgrade.common.data.tags.ModEntityTagsProvider;
-import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
+import fuzs.puzzleslib.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
 import net.neoforged.fml.common.Mod;
 

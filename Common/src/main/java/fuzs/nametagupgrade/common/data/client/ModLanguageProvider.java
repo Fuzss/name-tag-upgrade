@@ -2,8 +2,8 @@ package fuzs.nametagupgrade.common.data.client;
 
 import fuzs.nametagupgrade.common.client.gui.components.FormattingGuideWidget;
 import fuzs.nametagupgrade.common.client.gui.screens.inventory.NameTagEditScreen;
-import fuzs.puzzleslib.common.api.client.data.v2.AbstractLanguageProvider;
-import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
+import fuzs.puzzleslib.api.client.data.v2.AbstractLanguageProvider;
+import fuzs.puzzleslib.api.data.v2.core.DataProviderContext;
 import net.minecraft.ChatFormatting;
 
 public class ModLanguageProvider extends AbstractLanguageProvider {
