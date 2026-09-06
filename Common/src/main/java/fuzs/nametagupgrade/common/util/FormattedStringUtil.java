@@ -2,13 +2,13 @@ package fuzs.nametagupgrade.common.util;
 
 import fuzs.puzzleslib.api.client.input.v1.CharacterEvent;
 import fuzs.puzzleslib.api.util.v1.StyleCombiningCharSink;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentUtils;
-import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.*;
 import net.minecraft.util.StringDecomposer;
 import net.minecraft.util.StringUtil;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 
 import java.util.Objects;
 
@@ -17,10 +17,10 @@ import java.util.Objects;
  */
 public class FormattedStringUtil {
     /**
-     * A custom style for merging via {@link ComponentUtils#mergeStyles(Component, Style)} that preserves the style set
-     * by the player without any visual changes like italics being applied by vanilla.
+     * A custom style for merging via {@link ComponentUtils#mergeStyles(MutableComponent, Style)} that preserves the
+     * style set by the player without any visual changes like italics being applied by vanilla.
      *
-     * @see ItemStack#getStyledHoverName()
+     * @see ItemStack#getTooltipLines(Item.TooltipContext, Player, TooltipFlag)
      */
     public static final Style EMPTY = Style.EMPTY.withBold(false)
             .withItalic(false)
@@ -36,7 +36,7 @@ public class FormattedStringUtil {
     }
 
     /**
-     * @see StringUtil#isAllowedChatCharacter(int)
+     * @see StringUtil#isAllowedChatCharacter(char)
      */
     public static boolean isAllowedChatCharacter(int codePoint) {
         return StringUtil.isAllowedChatCharacter((char) codePoint) || codePoint == '§';
@@ -66,7 +66,7 @@ public class FormattedStringUtil {
     }
 
     /**
-     * @see fuzs.puzzleslib.common.api.util.v1.ComponentHelper#getAsComponent(String)
+     * @see fuzs.puzzleslib.api.util.v1.ComponentHelper#getAsComponent(String)
      */
     public static Component getAsComponent(String text) {
         Objects.requireNonNull(text, "text is null");
