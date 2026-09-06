@@ -4,6 +4,7 @@ import fuzs.nametagupgrade.common.util.FormattedStringUtil;
 import fuzs.puzzleslib.common.api.network.v4.codec.ExtraStreamCodecs;
 import fuzs.puzzleslib.common.api.network.v4.message.MessageListener;
 import fuzs.puzzleslib.common.api.network.v4.message.play.ServerboundPlayMessage;
+import fuzs.puzzleslib.common.api.util.v1.ComponentHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -12,6 +13,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+
+import java.util.Objects;
 
 public record ServerboundEditNameTagMessage(InteractionHand interactionHand,
                                             String itemName) implements ServerboundPlayMessage {
@@ -39,7 +42,9 @@ public record ServerboundEditNameTagMessage(InteractionHand interactionHand,
 
             public static void setFormattedItemName(ItemStack itemStack, String itemName) {
                 Component component = FormattedStringUtil.getAsComponent(itemName);
-                if (component.getString().isEmpty()) {
+                String originalItemName = ComponentHelper.getAsString(itemStack.getItemName());
+                String updatedItemName = ComponentHelper.getAsString(component);
+                if (component.getString().isEmpty() || Objects.equals(originalItemName, updatedItemName)) {
                     itemStack.remove(DataComponents.CUSTOM_NAME);
                 } else {
                     itemStack.set(DataComponents.CUSTOM_NAME, component);
