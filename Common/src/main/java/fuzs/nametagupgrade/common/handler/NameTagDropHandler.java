@@ -12,14 +12,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Leashable;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
@@ -35,8 +35,8 @@ public class NameTagDropHandler {
             return EventResult.PASS;
         }
 
-        if (livingEntity.getType().canSerialize() && !livingEntity.is(ModRegistry.NEVER_DROPS_NAME_TAG_ENTITY_TAG)
-                && livingEntity.hasCustomName()) {
+        if (livingEntity.getType().canSerialize() && !livingEntity.getType()
+                .is(ModRegistry.NEVER_DROPS_NAME_TAG_ENTITY_TAG) && livingEntity.hasCustomName()) {
             ItemStack itemStack = new ItemStack(Items.NAME_TAG);
             itemStack.set(DataComponents.CUSTOM_NAME, livingEntity.getCustomName());
             ItemEntity itemEntity = new ItemEntity(livingEntity.level(),
@@ -51,15 +51,15 @@ public class NameTagDropHandler {
         return EventResult.PASS;
     }
 
-    public static EventResultHolder<InteractionResult> onUseEntity(Player player, Level level, InteractionHand interactionHand, Entity entity, Vec3 hitVector) {
+    public static EventResultHolder<InteractionResult> onUseEntity(Player player, Level level, InteractionHand interactionHand, Entity entity) {
         ItemStack itemInHand = player.getItemInHand(interactionHand);
         if (NameTagUpgrade.CONFIG.get(ServerConfig.class).removeCustomNameUsingShears) {
-            if (ToolTypeHelper.INSTANCE.isShears(itemInHand)
-                    && !entity.is(ModRegistry.NEVER_SHEARS_CUSTOM_NAME_ENTITY_TAG)) {
-                if (!isLeashed(entity) && !isReadyForShearing(entity) && !hasShearableEquipment(entity, player)) {
+            if (ToolTypeHelper.INSTANCE.isShears(itemInHand) && !entity.getType()
+                    .is(ModRegistry.NEVER_SHEARS_CUSTOM_NAME_ENTITY_TAG)) {
+                if (!isLeashed(entity) && !isReadyForShearing(entity)) {
                     InteractionResult interactionResult = shearOffCustomName(player, level, entity);
                     if (interactionResult.consumesAction()) {
-                        itemInHand.hurtAndBreak(1, player, interactionHand);
+                        itemInHand.hurtAndBreak(1, player, LivingEntity.getSlotForHand(interactionHand));
                         return EventResultHolder.interrupt(interactionResult);
                     }
                 }
@@ -86,7 +86,8 @@ public class NameTagDropHandler {
                 }
 
                 if (NameTagUpgrade.CONFIG.get(ServerConfig.class).returnAppliedNameTags) {
-                    if (!entity.is(ModRegistry.NEVER_RETURNS_APPLIED_NAME_TAG_ENTITY_TAG) && entity.hasCustomName()) {
+                    if (!entity.getType().is(ModRegistry.NEVER_RETURNS_APPLIED_NAME_TAG_ENTITY_TAG)
+                            && entity.hasCustomName()) {
                         if (level instanceof ServerLevel serverLevel) {
                             spawnNameTagItem(serverLevel, entity);
                         }
@@ -114,32 +115,8 @@ public class NameTagDropHandler {
             return false;
         }
 
-        return entity instanceof Shearable shearable && shearable.readyForShearing()
-                && entity.is(ModRegistry.OVERRIDES_CUSTOM_NAME_SHEARING_ENTITY_TAG);
-    }
-
-    /**
-     * @see Entity#interact(Player, InteractionHand, Vec3)
-     * @see Mob#attemptToShearEquipment(Player, InteractionHand, ItemStack)
-     */
-    private static boolean hasShearableEquipment(Entity entity, Player player) {
-        if (!NameTagUpgrade.CONFIG.get(ServerConfig.class).prioritizeShearingEquipment) {
-            return false;
-        }
-
-        if (entity instanceof Mob mob && mob.canShearEquipment(player) && !player.isSecondaryUseActive()) {
-            for (EquipmentSlot slot : EquipmentSlot.VALUES) {
-                ItemStack itemStack = mob.getItemBySlot(slot);
-                Equippable equippable = itemStack.get(DataComponents.EQUIPPABLE);
-                if (equippable != null && equippable.canBeSheared() && (
-                        !EnchantmentHelper.has(itemStack, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE)
-                                || player.isCreative())) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return entity instanceof Shearable shearable && shearable.readyForShearing() && entity.getType()
+                .is(ModRegistry.OVERRIDES_CUSTOM_NAME_SHEARING_ENTITY_TAG);
     }
 
     /**
@@ -152,7 +129,7 @@ public class NameTagDropHandler {
                 entity.gameEvent(GameEvent.SHEAR, player);
                 serverLevel.playSound(null,
                         entity.blockPosition(),
-                        SoundEvents.SHEARS_SNIP,
+                        SoundEvents.SNOW_GOLEM_SHEAR,
                         player != null ? player.getSoundSource() : entity.getSoundSource());
             }
 
@@ -166,6 +143,6 @@ public class NameTagDropHandler {
     private static void spawnNameTagItem(ServerLevel serverLevel, Entity entity) {
         ItemStack itemStack = new ItemStack(Items.NAME_TAG);
         itemStack.set(DataComponents.CUSTOM_NAME, entity.getCustomName());
-        entity.spawnAtLocation(serverLevel, itemStack, entity.getEyeHeight());
+        entity.spawnAtLocation(itemStack, entity.getEyeHeight());
     }
 }

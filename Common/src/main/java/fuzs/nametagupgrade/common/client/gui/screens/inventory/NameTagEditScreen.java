@@ -7,12 +7,12 @@ import fuzs.nametagupgrade.common.config.ServerConfig;
 import fuzs.nametagupgrade.common.network.client.ServerboundEditNameTagMessage;
 import fuzs.puzzleslib.api.network.v4.MessageSender;
 import fuzs.puzzleslib.api.util.v1.ComponentHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +22,8 @@ import net.minecraft.world.item.Items;
 
 public class NameTagEditScreen extends Screen {
     private static final ResourceLocation TEXTURE_LOCATION = NameTagUpgrade.id("textures/gui/edit_name_tag.png");
-    private static final ResourceLocation TEXT_FIELD_SPRITE = ResourceLocation.withDefaultNamespace("container/anvil/text_field");
+    private static final ResourceLocation TEXT_FIELD_SPRITE = ResourceLocation.withDefaultNamespace(
+            "container/anvil/text_field");
     private static final ResourceLocation TEXT_FIELD_DISABLED_SPRITE = ResourceLocation.withDefaultNamespace(
             "container/anvil/text_field_disabled");
     public static final String EDIT_NAME_TAG_KEY = NameTagUpgrade.id("name_tag").toLanguageKey("gui", "edit");
@@ -38,7 +39,7 @@ public class NameTagEditScreen extends Screen {
     private EditBox name;
 
     public NameTagEditScreen(ItemStack itemStack, InteractionHand interactionHand) {
-        super(Component.translatable(EDIT_NAME_TAG_KEY, itemStack.getItemName()));
+        super(Component.translatable(EDIT_NAME_TAG_KEY, itemStack.getItem().getName(itemStack)));
         this.interactionHand = interactionHand;
         this.initialItemName = ComponentHelper.getAsString(itemStack.getHoverName());
     }
@@ -55,7 +56,6 @@ public class NameTagEditScreen extends Screen {
         this.name.setCanLoseFocus(false);
         this.name.setTextColor(-1);
         this.name.setTextColorUneditable(-1);
-        this.name.setInvertHighlightedTextColor(false);
         this.name.setBordered(false);
         this.name.setMaxLength(50);
         this.name.setValue(this.initialItemName);
@@ -77,16 +77,16 @@ public class NameTagEditScreen extends Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(Minecraft minecraft, int width, int height) {
         String inputValue = this.name.getValue();
-        super.resize(width, height);
+        super.resize(minecraft, width, height);
         this.name.setValue(inputValue);
     }
 
     @Override
-    public void extractRenderState(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
-        guiGraphics.text(this.font,
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        guiGraphics.drawString(this.font,
                 this.title,
                 this.leftPos + this.titleLabelX,
                 this.topPos + this.titleLabelY,
@@ -95,10 +95,9 @@ public class NameTagEditScreen extends Screen {
     }
 
     @Override
-    public void extractBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.extractBackground(guiGraphics, mouseX, mouseY, partialTick);
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                TEXTURE_LOCATION,
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        this.renderTransparentBackground(guiGraphics);
+        guiGraphics.blit(TEXTURE_LOCATION,
                 this.leftPos,
                 this.topPos,
                 0,
@@ -107,25 +106,15 @@ public class NameTagEditScreen extends Screen {
                 this.imageHeight,
                 256,
                 256);
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
-                TEXT_FIELD_SPRITE,
-                this.leftPos + 59,
-                this.topPos + 22,
-                110,
-                16);
-        guiGraphics.pose().pushMatrix();
-        guiGraphics.pose().scale(2.0F, 2.0F);
-        guiGraphics.item(new ItemStack(Items.NAME_TAG), (this.leftPos + 17) / 2, (this.topPos + 8) / 2);
-        guiGraphics.pose().popMatrix();
+        guiGraphics.blitSprite(TEXT_FIELD_SPRITE, this.leftPos + 59, this.topPos + 22, 110, 16);
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(2.0F, 2.0F, 2.0F);
+        guiGraphics.renderFakeItem(new ItemStack(Items.NAME_TAG), (this.leftPos + 17) / 2, (this.topPos + 8) / 2);
+        guiGraphics.pose().popPose();
     }
 
     @Override
     public boolean isPauseScreen() {
         return false;
-    }
-
-    @Override
-    public boolean isInGameUi() {
-        return true;
     }
 }

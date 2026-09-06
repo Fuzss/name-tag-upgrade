@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import fuzs.nametagupgrade.common.NameTagUpgrade;
 import fuzs.nametagupgrade.common.client.gui.screens.inventory.tooltip.LargeTooltipPositioner;
 import fuzs.nametagupgrade.common.util.FormattedStringDecomposer;
-import fuzs.puzzleslib.api.client.gui.v2.tooltip.TooltipBuilder;
+import fuzs.puzzleslib.api.client.gui.v2.components.tooltip.TooltipBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -97,21 +97,21 @@ public class FormattingGuideWidget extends AbstractWidget {
 
     @Override
     public Component getMessage() {
-        return this.isHoveredOrFocused() ? this.message : this.inactiveMessage;
+        return this.isHoveredOrFocused() ? super.getMessage() : this.inactiveMessage;
     }
 
     @Override
     public void setMessage(Component message) {
-        this.message = ComponentUtils.mergeStyles(message, Style.EMPTY.withColor(ChatFormatting.YELLOW));
-        this.inactiveMessage = ComponentUtils.mergeStyles(message, Style.EMPTY.withColor(0x404040));
+        super.setMessage(ComponentUtils.mergeStyles(message.copy(), Style.EMPTY.withColor(ChatFormatting.YELLOW)));
+        this.inactiveMessage = ComponentUtils.mergeStyles(message.copy(), Style.EMPTY.withColor(0x404040));
     }
 
     @Override
-    public void extractWidgetRenderState(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         Component component = this.getMessage();
         int posX = this.getX() + (this.getWidth() - this.font.width(component)) / 2;
         int posY = this.getY() + (this.getHeight() - 9) / 2;
-        guiGraphics.text(this.font, component, posX, posY, -1, false);
+        guiGraphics.drawString(this.font, component, posX, posY, -1, false);
     }
 
     @Override

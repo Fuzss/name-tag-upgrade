@@ -36,7 +36,7 @@ public class NameTagUpgradeClient implements ClientModConstructor {
             if (itemInHand.is(Items.NAME_TAG)
                     && NameTagUpgrade.CONFIG.get(ClientConfig.class).openNameTagEditScreen.canOpen(player,
                     itemInHand)) {
-                Minecraft.getInstance().gui.setScreen(new NameTagEditScreen(itemInHand, interactionHand));
+                Minecraft.getInstance().setScreen(new NameTagEditScreen(itemInHand, interactionHand));
                 return EventResultHolder.interrupt(InteractionResult.SUCCESS);
             }
         }

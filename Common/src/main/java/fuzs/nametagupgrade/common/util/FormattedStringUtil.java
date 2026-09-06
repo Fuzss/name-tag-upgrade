@@ -1,7 +1,7 @@
 package fuzs.nametagupgrade.common.util;
 
+import fuzs.puzzleslib.api.client.input.v1.CharacterEvent;
 import fuzs.puzzleslib.api.util.v1.StyleCombiningCharSink;
-import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.FormattedText;
@@ -39,7 +39,7 @@ public class FormattedStringUtil {
      * @see StringUtil#isAllowedChatCharacter(int)
      */
     public static boolean isAllowedChatCharacter(int codePoint) {
-        return StringUtil.isAllowedChatCharacter(codePoint) || codePoint == '§';
+        return StringUtil.isAllowedChatCharacter((char) codePoint) || codePoint == '§';
     }
 
     /**
