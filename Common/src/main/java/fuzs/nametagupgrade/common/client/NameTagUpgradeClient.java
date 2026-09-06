@@ -5,6 +5,7 @@ import fuzs.nametagupgrade.common.client.gui.screens.inventory.NameTagEditScreen
 import fuzs.nametagupgrade.common.config.ClientConfig;
 import fuzs.nametagupgrade.common.config.ServerConfig;
 import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
+import fuzs.puzzleslib.api.event.v1.core.EventPhase;
 import fuzs.puzzleslib.api.event.v1.core.EventResultHolder;
 import fuzs.puzzleslib.api.event.v1.entity.player.PlayerInteractEvents;
 import net.minecraft.client.Minecraft;
@@ -23,7 +24,8 @@ public class NameTagUpgradeClient implements ClientModConstructor {
     }
 
     private static void registerEventHandlers() {
-        PlayerInteractEvents.USE_ITEM.register(NameTagUpgradeClient::onUseItem);
+        // Run before Easy Anvils, it still has its own name tag implementation which this should bypass.
+        PlayerInteractEvents.USE_ITEM.register(EventPhase.BEFORE, NameTagUpgradeClient::onUseItem);
     }
 
     public static EventResultHolder<InteractionResult> onUseItem(Player player, Level level, InteractionHand interactionHand) {
