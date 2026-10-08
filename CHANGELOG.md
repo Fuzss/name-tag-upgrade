@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v26.1.4-mc26.1.x] - 2026-10-08
+
+### Fixed
+
+- Respect the renamingSupportsFormatting config option when renaming items with a name tag
+- Remove the minecraft:custom_name component when a name tag name is unchanged
+
 ## [v26.1.3-mc26.1.x] - 2026-09-06
 
 ### Fixed
