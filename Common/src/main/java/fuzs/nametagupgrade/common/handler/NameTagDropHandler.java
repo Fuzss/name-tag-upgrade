@@ -3,6 +3,7 @@ package fuzs.nametagupgrade.common.handler;
 import fuzs.nametagupgrade.common.NameTagUpgrade;
 import fuzs.nametagupgrade.common.config.ServerConfig;
 import fuzs.nametagupgrade.common.init.ModRegistry;
+import fuzs.nametagupgrade.common.util.FormattedStringUtil;
 import fuzs.puzzleslib.api.event.v1.core.EventResult;
 import fuzs.puzzleslib.api.event.v1.core.EventResultHolder;
 import fuzs.puzzleslib.api.item.v2.ToolTypeHelper;
@@ -69,7 +70,8 @@ public class NameTagDropHandler {
         if (itemInHand.is(Items.NAME_TAG) && itemInHand.has(DataComponents.CUSTOM_NAME)) {
             if (entity.getType().canSerialize() && entity.isAlive()) {
                 if (NameTagUpgrade.CONFIG.get(ServerConfig.class).preventVoidingNameTags) {
-                    if (Objects.equals(entity.getCustomName(), itemInHand.get(DataComponents.CUSTOM_NAME))) {
+                    if (entity.hasCustomName() && Objects.equals(FormattedStringUtil.getAsString(entity.getCustomName()),
+                            FormattedStringUtil.getAsString(itemInHand.get(DataComponents.CUSTOM_NAME)))) {
                         return EventResultHolder.interrupt(InteractionResult.PASS);
                     }
                 }

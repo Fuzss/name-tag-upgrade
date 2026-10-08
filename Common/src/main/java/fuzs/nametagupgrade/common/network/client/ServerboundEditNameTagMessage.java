@@ -4,7 +4,6 @@ import fuzs.nametagupgrade.common.util.FormattedStringUtil;
 import fuzs.puzzleslib.api.network.v4.codec.ExtraStreamCodecs;
 import fuzs.puzzleslib.api.network.v4.message.MessageListener;
 import fuzs.puzzleslib.api.network.v4.message.play.ServerboundPlayMessage;
-import fuzs.puzzleslib.api.util.v1.ComponentHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -42,12 +41,19 @@ public record ServerboundEditNameTagMessage(InteractionHand interactionHand,
 
             public static void setFormattedItemName(ItemStack itemStack, String itemName) {
                 Component component = FormattedStringUtil.getAsComponent(itemName);
-                String originalItemName = ComponentHelper.getAsString(itemStack.getItem().getName(itemStack));
-                String updatedItemName = ComponentHelper.getAsString(component);
-                if (component.getString().isEmpty() || Objects.equals(originalItemName, updatedItemName)) {
+                if (component.getString().isBlank()) {
                     itemStack.remove(DataComponents.CUSTOM_NAME);
                 } else {
-                    itemStack.set(DataComponents.CUSTOM_NAME, component);
+                    String updatedItemName = FormattedStringUtil.getAsString(component);
+                    if (Objects.equals(updatedItemName,
+                            FormattedStringUtil.getAsString(itemStack.getItem().getName(itemStack)))) {
+                        // the new name matches the default item name, so a custom name component is not needed
+                        itemStack.remove(DataComponents.CUSTOM_NAME);
+                    } else if (!Objects.equals(updatedItemName,
+                            FormattedStringUtil.getAsString(itemStack.getHoverName()))) {
+                        // only set the component when the name actually changed to avoid rewriting it needlessly
+                        itemStack.set(DataComponents.CUSTOM_NAME, component);
+                    }
                 }
             }
         };
